@@ -8,11 +8,12 @@ import LeadsTable from '@/components/leads/LeadsTable';
 import NewLeadModal from '@/components/leads/NewLeadModal';
 import ConvertQuotationModal from '@/components/leads/ConvertQuotationModal';
 import { PlusIcon } from '@/components/ui/Icons';
+import { useLeadModal } from '@/context/LeadModalContext';
 
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>(mockLeads);
-  const [newLeadOpen, setNewLeadOpen] = useState(false);
   const [quotationLead, setQuotationLead] = useState<Lead | null>(null);
+  const { newLeadOpen, openNewLead, closeNewLead } = useLeadModal();
 
   function handleSaveLead(data: NewLeadFormData) {
     const initials = data.customerName
@@ -48,14 +49,14 @@ export default function LeadsPage() {
 
   return (
     <>
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Leads Management</h1>
           <p className="text-sm text-gray-500 mt-1">Track and convert your recent transportation inquiries.</p>
         </div>
         <button
-          onClick={() => setNewLeadOpen(true)}
-          className="flex items-center gap-2 bg-indigo-700 hover:bg-indigo-800 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors"
+          onClick={openNewLead}
+          className="self-start flex items-center gap-2 bg-indigo-700 hover:bg-indigo-800 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors"
         >
           <PlusIcon className="w-4 h-4" />
           New Lead
@@ -73,7 +74,7 @@ export default function LeadsPage() {
 
       <NewLeadModal
         isOpen={newLeadOpen}
-        onClose={() => setNewLeadOpen(false)}
+        onClose={closeNewLead}
         onSave={handleSaveLead}
       />
 
